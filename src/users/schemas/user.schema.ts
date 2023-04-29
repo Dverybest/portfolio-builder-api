@@ -1,12 +1,22 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 import { HydratedDocument, Model } from 'mongoose';
-import { type } from 'os';
+import { hashPassword } from 'src/utils';
 
-@Schema()
+@Schema({
+  timestamps: true,
+  toJSON: {
+    virtuals: true,
+    transform: function (_, ret) {
+      delete ret._id;
+      delete ret.__v;
+      return ret;
+    },
+  },
+})
 export class User {
   _id: string;
-  
+
   @ApiProperty()
   @Prop()
   fullName: string;
@@ -24,3 +34,8 @@ export type UserDocument = HydratedDocument<User>;
 export const UserSchema = SchemaFactory.createForClass(User);
 
 export type UserModel = Model<User>;
+
+UserSchema.pre('save', function (next) {
+  this.password = hashPassword(this.password);
+  next();
+});

@@ -9,7 +9,7 @@ import { FilterQuery } from 'mongoose';
 export class UsersService {
   constructor(@InjectModel(User.name) private userModel: UserModel) {}
 
-  create(createUserDto: CreateUserDto): Promise<User> {
+  create(createUserDto: CreateUserDto) {
     const user = new this.userModel(createUserDto);
     return user.save();
   }
