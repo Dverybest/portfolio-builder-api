@@ -2,8 +2,7 @@ import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
-import { LoginDto } from './dto/auth.dto';
-import { User } from 'src/users/schemas/user.schema';
+import { AuthResponseDto, LoginDto } from './dto/auth.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -12,7 +11,7 @@ export class AuthController {
 
   @ApiOperation({ summary: 'user sign up' })
   @ApiOkResponse({
-    type: User,
+    type: AuthResponseDto,
   })
   @HttpCode(HttpStatus.CREATED)
   @Post('/sign-up')
@@ -22,7 +21,7 @@ export class AuthController {
 
   @ApiOperation({ summary: 'user login' })
   @ApiOkResponse({
-    type: User,
+    type: AuthResponseDto,
   })
   @HttpCode(HttpStatus.OK)
   @Post('/sign-in')

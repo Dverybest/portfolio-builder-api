@@ -27,6 +27,12 @@ export class User {
 
   @Prop()
   password: string;
+
+  @ApiProperty()
+  createdAt: Date;
+
+  @ApiProperty()
+  updatedAt: Date;
 }
 
 export type UserDocument = HydratedDocument<User>;
