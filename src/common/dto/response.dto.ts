@@ -4,6 +4,7 @@ export class Response<T> {
   @ApiProperty()
   status: string;
 
+  @ApiProperty()
   data: T;
 
   @ApiProperty()
