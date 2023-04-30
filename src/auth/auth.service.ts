@@ -12,12 +12,9 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async validatUser(email: string, password: string) {
+  async validatUser(email: string) {
     const user = await this.usersService.findOne({ email });
-    if (user && user.password === password) {
-      return user;
-    }
-    return null;
+    return user;
   }
 
   async create(createUserDto: CreateUserDto) {
