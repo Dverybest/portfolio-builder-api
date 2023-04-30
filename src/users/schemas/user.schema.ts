@@ -18,15 +18,24 @@ export class User {
   _id: string;
 
   @ApiProperty()
-  @Prop()
+  @Prop({ required: true })
   fullName: string;
 
   @ApiProperty()
   @Prop({ unique: true, required: true })
   email: string;
 
-  @Prop()
+  @Prop({ type: String })
   password: string;
+
+  @Prop({ type: String, default: null })
+  picture: string;
+
+  @Prop({ type: Boolean, default: false })
+  isGoogleSignIn: boolean;
+
+  @Prop({ type: Boolean, default: false })
+  isLinkedInSignIn: boolean;
 
   @ApiProperty()
   createdAt: Date;
@@ -42,6 +51,8 @@ export const UserSchema = SchemaFactory.createForClass(User);
 export type UserModel = Model<User>;
 
 UserSchema.pre('save', function (next) {
-  this.password = hashPassword(this.password);
+  if (this.password) {
+    this.password = hashPassword(this.password);
+  }
   next();
 });
