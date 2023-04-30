@@ -22,7 +22,7 @@ export class AuthService {
       email: createUserDto.email,
     });
     if (exitingUser) {
-      throw new BadRequestException();
+      throw new BadRequestException('User already exits');
     }
 
     const user = await this.usersService.create(createUserDto);
@@ -53,5 +53,33 @@ export class AuthService {
     });
     const { password, ...rest } = user.toJSON();
     return { ...rest, access_token };
+  }
+
+  async googleSignIn({
+    fullName,
+    email,
+    picture,
+  }: {
+    fullName: string;
+    email: string;
+    picture?: string;
+  }) {
+    let user = await this.usersService.findOne({ email });
+
+    if (!user) {
+      user = await this.usersService.create({
+        email,
+        fullName,
+        picture,
+        isGoogleSignIn: true,
+      });
+    }
+
+    const access_token = this.jwtService.sign({
+      email: user.email,
+      id: user._id,
+    });
+
+    return { ...user, access_token };
   }
 }

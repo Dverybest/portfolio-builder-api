@@ -13,6 +13,12 @@ async function bootstrap() {
 
   app.use(helmet());
 
+  app.setGlobalPrefix(configService.get('apiPrefix'), {
+    exclude: ['/'],
+  });
+  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalInterceptors(new TransformInterceptor());
+  
   const config = new DocumentBuilder()
     .setTitle('Portfolio builder')
     .setDescription('The portfolio builder API')
@@ -22,10 +28,7 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
-
-  app.useGlobalPipes(new ValidationPipe());
-  app.useGlobalInterceptors(new TransformInterceptor());
-
+  
   await app.listen(configService.get('port'));
 }
 bootstrap();
