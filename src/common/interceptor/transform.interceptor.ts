@@ -19,10 +19,10 @@ export class TransformInterceptor<T>
   ): Observable<Response<T>> {
     return next.handle().pipe(
       map((data = {}) => {
-        const { message, status } = data;
+        const { message, status ,...rest} = data;
         return {
           status: status ?? 'success',
-          data: Object.keys(data).length !== 0 ? data : null,
+          data: Object.keys(rest).length !== 0 ? {...rest} : null,
           message: message ?? null,
         };
       }),
