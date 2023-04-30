@@ -10,7 +10,12 @@ import {
   Res,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiExcludeEndpoint,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { AuthResponseDto, LoginDto } from './dto/auth.dto';
 import { AuthGuard } from '@nestjs/passport';
@@ -46,9 +51,15 @@ export class AuthController {
   }
 
   @Get('google')
+  @ApiOperation({
+    summary: 'sign in with google',
+    description:
+      'call this endpoint from a browser for it to redirect to google server',
+  })
   @UseGuards(AuthGuard('google'))
   googleLogin() {}
 
+  @ApiExcludeEndpoint()
   @Get('google/callback')
   @UseGuards(AuthGuard('google'))
   async googleLoginCallback(@Req() req, @Res() res: Response) {
