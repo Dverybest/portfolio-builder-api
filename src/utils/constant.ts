@@ -1,0 +1,1 @@
+export const EXPIRE_IN_ONE_HOUR = 3600000;

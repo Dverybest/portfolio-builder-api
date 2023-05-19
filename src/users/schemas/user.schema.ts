@@ -25,17 +25,25 @@ export class User {
   @Prop({ unique: true, required: true })
   email: string;
 
+  @ApiProperty()
   @Prop({ type: String })
   password: string;
 
+  @ApiProperty()
   @Prop({ type: String, default: null })
   picture: string;
 
+  @ApiProperty()
   @Prop({ type: Boolean, default: false })
   isGoogleSignIn: boolean;
 
+  @ApiProperty()
   @Prop({ type: Boolean, default: false })
   isLinkedInSignIn: boolean;
+
+  @ApiProperty({type:Boolean})
+  @Prop({ type: Boolean, default: false })
+  hasVerifiedEmail: boolean;
 
   @ApiProperty()
   createdAt: Date;
