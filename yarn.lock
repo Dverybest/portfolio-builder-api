@@ -1162,6 +1162,14 @@
     "@types/jsonwebtoken" "*"
     "@types/passport-strategy" "*"
 
+"@types/passport-linkedin-oauth2@^1.5.3":
+  version "1.5.3"
+  resolved "https://registry.yarnpkg.com/@types/passport-linkedin-oauth2/-/passport-linkedin-oauth2-1.5.3.tgz#8bfaa0064f27f19b748f113ea1300f126e13e43a"
+  integrity sha512-xe6z/5eMUrU8MbITMRQXrfpZSWkyhyvdgIQsk7B2k6OxEL+zyi3cuPRnOIYAnM5rYs0XHc63PF4gWI/oIEB+4Q==
+  dependencies:
+    "@types/express" "*"
+    "@types/passport" "*"
+
 "@types/passport-local@^1.0.35":
   version "1.0.35"
   resolved "https://registry.yarnpkg.com/@types/passport-local/-/passport-local-1.0.35.tgz#233d370431b3f93bb43cf59154fb7519314156d9"
@@ -5399,6 +5407,13 @@ passport-jwt@^4.0.1:
   dependencies:
     jsonwebtoken "^9.0.0"
     passport-strategy "^1.0.0"
+
+passport-linkedin-oauth2@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/passport-linkedin-oauth2/-/passport-linkedin-oauth2-2.0.0.tgz#c320374baa44c1412a9b023590d1d0c1c77cfe73"
+  integrity sha512-PnSeq2HzFQ/y1/p2RTF/kG2zhJ7kwGVg4xO3E+JNxz2aI0pFJGAqC503FVpUksYbhQdNhL6QYlK9qrEXD7ZYCg==
+  dependencies:
+    passport-oauth2 "1.x.x"
 
 passport-local@^1.0.0:
   version "1.0.0"

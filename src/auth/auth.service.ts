@@ -49,11 +49,11 @@ export class AuthService {
     if (value !== token) {
       throw new BadRequestException('Invalid token');
     }
-    const user = this.usersService.update(
-      { email },
-      { hasVerifiedEmail: true },
-    );
-    return user;
+    await this.cacheManager.del(email);
+    const user = await this.usersService
+      .update({ email }, { hasVerifiedEmail: true })
+      .select(['-password']);
+    return user.toJSON();
   }
 
   async login(loginDto: LoginDto) {
@@ -76,14 +76,16 @@ export class AuthService {
     return { ...rest, access_token };
   }
 
-  async googleSignIn({
+  async socialSignIn({
     fullName,
     email,
     picture,
+    isGoogleSignIn,
   }: {
     fullName: string;
     email: string;
     picture?: string;
+    isGoogleSignIn?: boolean;
   }) {
     let user = await this.usersService.findOne({ email });
     let isNewUser = false;
@@ -92,7 +94,8 @@ export class AuthService {
         email,
         fullName,
         picture,
-        isGoogleSignIn: true,
+        isGoogleSignIn,
+        isLinkedInSignIn: !isGoogleSignIn,
         hasVerifiedEmail: true,
       });
       isNewUser = true;

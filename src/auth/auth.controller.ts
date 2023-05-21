@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import {
+  ApiBadRequestResponse,
   ApiExcludeEndpoint,
   ApiOkResponse,
   ApiOperation,
@@ -25,7 +26,7 @@ import { EmailService } from 'src/email/email.service';
 import { Auth } from 'src/common/decorators/auth.decorator';
 import { CurrentUser } from 'src/common/decorators/user.decorator';
 import { User } from 'src/users/schemas/user.schema';
-import { ResponseDTO } from 'src/common/dto/response.dto';
+import { ErrorResponseDTO, ResponseDTO } from 'src/common/dto/response.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -44,8 +45,8 @@ export class AuthController {
   @Post('/sign-up')
   async signUp(@Body() createUserDto: CreateUserDto) {
     const user = await this.authService.create(createUserDto);
-    await this.emailService.sendWelcomeMail(user.email, user.fullName);
-    await this.emailService.sendVerifyAccountMail(user.email, user.fullName);
+    this.emailService.sendWelcomeMail(user.email, user.fullName);
+    this.emailService.sendVerifyAccountMail(user.email, user.fullName);
     return user;
   }
 
@@ -68,18 +69,24 @@ export class AuthController {
   @Post('/resend-verification-token')
   async resendVerifiicationToken(@CurrentUser() user: User) {
     this.emailService.sendVerifyAccountMail(user.email, user.fullName);
-    return null;
+    return { message: 'Verification token sent!' };
   }
 
   @ApiOperation({ summary: 'verify token' })
   @ApiOkResponse({
     type: ResponseDTO,
   })
+  @ApiBadRequestResponse({
+    type: ErrorResponseDTO,
+  })
   @Auth()
   @HttpCode(HttpStatus.OK)
   @Post('/verify-token')
-  async verifiicationToken(@Body() body: VerifyTokenDTO,@CurrentUser() user: User) {
-    return this.authService.verifyToken(user.email,body.token);
+  async verifiicationToken(
+    @Body() body: VerifyTokenDTO,
+    @CurrentUser() user: User,
+  ) {
+    return this.authService.verifyToken(user.email, body.token);
   }
 
   @Get('google')
@@ -95,16 +102,43 @@ export class AuthController {
   @Get('google/callback')
   @UseGuards(AuthGuard('google'))
   async googleLoginCallback(@Req() req, @Res() res: Response) {
-    const user = await this.authService.googleSignIn({
+    const user = await this.authService.socialSignIn({
       email: req.user.email,
       fullName: req.user.fullName,
       picture: req.user.picture,
+      isGoogleSignIn: true,
     });
-    if(user.isNewUser){
+    if (user.isNewUser) {
       await this.emailService.sendWelcomeMail(user.email, user.fullName);
     }
     return res.redirect(
-      `${this.configService.get('frontendUrl')}?token=${user.access_token}`,
+      `${this.configService.get('frontendUrl')}/auth?token=${
+        user.access_token
+      }`,
+    );
+  }
+
+  @Get('linkedin')
+  @UseGuards(AuthGuard('linkedin'))
+  async linkedinAuth() {}
+
+  @ApiExcludeEndpoint()
+  @Get('linkedin/callback')
+  @UseGuards(AuthGuard('linkedin'))
+  async linkedinAuthCallback(@Req() req, @Res() res: Response) {
+    const user = await this.authService.socialSignIn({
+      email: req.user.email,
+      fullName: req.user.fullName,
+      picture: req.user.picture,
+      isGoogleSignIn: true,
+    });
+    if (user.isNewUser) {
+      await this.emailService.sendWelcomeMail(user.email, user.fullName);
+    }
+    return res.redirect(
+      `${this.configService.get('frontendUrl')}/auth?token=${
+        user.access_token
+      }`,
     );
   }
 }
