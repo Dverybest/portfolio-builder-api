@@ -25,6 +25,6 @@ export class DashboardController {
   })
   @HttpCode(HttpStatus.OK)
   userProfile(@CurrentUser() user: User) {
-    return this.usersService.findOne({ _id: user._id }).select(['-password']);
+    return user ;
   }
 }

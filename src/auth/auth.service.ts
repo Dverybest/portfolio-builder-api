@@ -21,7 +21,9 @@ export class AuthService {
   ) {}
 
   async validatUser(email: string) {
-    const user = await this.usersService.findOne({ email });
+    const user = (
+      await this.usersService.findOne({ email }).select(['-password'])
+    ).toJSON();
     return user;
   }
 
