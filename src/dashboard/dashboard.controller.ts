@@ -1,15 +1,16 @@
+import { Controller, Get, HttpCode, HttpStatus } from '@nestjs/common';
 import {
-  Controller,
-  Get,
-  HttpCode,
-  HttpStatus,
-} from '@nestjs/common';
-import { ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+  ApiOkResponse,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Auth } from 'src/common/decorators/auth.decorator';
 import { CurrentUser } from 'src/common/decorators/user.decorator';
-import { Response } from 'src/common/dto/response.dto';
+import { ResponseDTO } from 'src/common/dto/response.dto';
 import { User } from 'src/users/schemas/user.schema';
 import { UsersService } from 'src/users/users.service';
+import { UserDTO } from './dto/dasboard.dto';
 
 @ApiTags('dashboard')
 @Controller('dashboard')
@@ -18,9 +19,9 @@ export class DashboardController {
 
   @Auth()
   @Get('/profile')
-  @ApiOperation({summary:'user profile'})
+  @ApiOperation({ summary: 'user profile' })
   @ApiOkResponse({
-    type: Response<User>,
+    type: UserDTO,
   })
   @HttpCode(HttpStatus.OK)
   userProfile(@CurrentUser() user: User) {

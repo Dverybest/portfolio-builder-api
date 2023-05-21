@@ -5,18 +5,18 @@ import {
   NestInterceptor,
 } from '@nestjs/common';
 import { Observable, map } from 'rxjs';
-import { Response } from '../dto/response.dto';
+import { ResponseDTO } from '../dto/response.dto';
 
 
 
 @Injectable()
 export class TransformInterceptor<T>
-  implements NestInterceptor<T, Response<T>>
+  implements NestInterceptor<T, ResponseDTO>
 {
   intercept(
     context: ExecutionContext,
     next: CallHandler,
-  ): Observable<Response<T>> {
+  ): Observable<ResponseDTO> {
     return next.handle().pipe(
       map((data = {}) => {
         const { message, status ,...rest} = data;
