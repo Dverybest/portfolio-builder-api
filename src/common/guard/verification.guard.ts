@@ -17,7 +17,13 @@ export class VerificationGuard implements CanActivate {
       .switchToHttp()
       .getRequest<{ path: string; user: User }>();
     const { user, path } = request;
-    if (!user.hasVerifiedEmail && !path.includes('/auth/verify-token')) {
+    if (
+      !user.hasVerifiedEmail &&
+      !(
+        path.includes('/auth/verify-token') ||
+        path.includes('/auth/resend-verification-token')
+      )
+    ) {
       throw new ForbiddenException('Email verification is required');
     }
     return true;
