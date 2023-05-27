@@ -16,14 +16,14 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
 
   async validate(
     accessToken: string,
-    refreshToken: string,
+    _refreshToken: string,
     profile: any,
     done: VerifyCallback,
   ) {
     const { name, emails, photos } = profile;
     const user = {
       email: emails[0].value,
-      fullName: name.givenName + name.familyName,
+      fullName: `${name.givenName} ${name.familyName}`,
       picture: photos[0].value,
       accessToken,
     };

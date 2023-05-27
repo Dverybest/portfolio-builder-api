@@ -13,8 +13,8 @@ export class ErrorResponseDTO {
   status: string;
 
   @ApiProperty()
-  error: string;
+  message: string;
 
   @ApiProperty({ type: String, isArray: true })
-  errors: string[];
+  errors?: string[];
 }
