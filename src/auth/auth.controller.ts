@@ -108,8 +108,8 @@ export class AuthController {
       picture: req.user.picture,
       isGoogleSignIn: true,
     });
-    if (user.isNewUser) {
-      await this.emailService.sendWelcomeMail(user.email, user.fullName);
+    if (user.isNewUser) {   
+      this.emailService.sendWelcomeMail(user.email, user.fullName);
     }
     return res.redirect(
       `${this.configService.get('frontendUrl')}/auth?token=${
