@@ -39,7 +39,7 @@ export class AuthService {
 
     const access_token = this.jwtService.sign({
       email: user.email,
-      id: user._id,
+      hasVerifiedEmail: user.hasVerifiedEmail,
     });
     const { password, ...rest } = user.toJSON();
 
@@ -72,7 +72,7 @@ export class AuthService {
 
     const access_token = this.jwtService.sign({
       email: user.email,
-      id: user._id,
+      hasVerifiedEmail: user.hasVerifiedEmail,
     });
     const { password, ...rest } = user.toJSON();
     return { ...rest, access_token };
@@ -105,7 +105,7 @@ export class AuthService {
 
     const access_token = this.jwtService.sign({
       email: user.email,
-      id: user._id,
+      hasVerifiedEmail: user.hasVerifiedEmail,
     });
 
     return { ...user, access_token, isNewUser };
