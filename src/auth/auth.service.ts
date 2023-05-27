@@ -108,6 +108,11 @@ export class AuthService {
       hasVerifiedEmail: user.hasVerifiedEmail,
     });
 
-    return { ...user, access_token, isNewUser };
+    return {
+      email: user.email,
+      fullName: user.fullName,
+      access_token,
+      isNewUser,
+    };
   }
 }
